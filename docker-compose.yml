@@ -21,3 +21,9 @@ services:
     depends_on:
       - postgres
 
+    golang:
+    depends_on:
+      - postgres
+    image:
+
+
