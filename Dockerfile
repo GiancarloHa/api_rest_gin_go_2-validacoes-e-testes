@@ -1,7 +1,15 @@
-FROM golang:1.19.1-alpine3.16
-EXPOSE 8000
+FROM golang:1.19.1  as builder
+
 WORKDIR /app
+COPY . /app
+RUN CGO_ENABLED=0 GOOS=linux go build -o api main.go
+# final (target) stage
+
+FROM scratch
+WORKDIR /app
+COPY --from=builder /app/api ./
 ENV HOST=localhost PORT=5432
 ENV USER=root PASSWORD=root DBNAME=root
-COPY ./main main
-CMD [ "./main" ]
+ENV GIN_MODE=release
+EXPOSE 8080
+CMD ["./api"]
