@@ -14,10 +14,10 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     env:
-      DBHOST: localhost
+      HOST: localhost
       DBPORT: 5432
-      DBUSER: root
-      DBPASSWORD: root
+      USER: root
+      PASSWORD: root
       DBNAME: root
     strategy:
       matrix:
