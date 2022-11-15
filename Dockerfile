@@ -8,8 +8,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o api main.go
 FROM scratch
 WORKDIR /app
 COPY --from=builder /app/api ./
-ENV DBHOST=localhost DBPORT=5432
-ENV DBUSER=root DBPASSWORD=root DBNAME=root
+ENV HOST=localhost DBPORT=5432
+ENV USER=root PASSWORD=root DBNAME=root
 ENV GIN_MODE=release
 EXPOSE 8080
 CMD ["./api"]
