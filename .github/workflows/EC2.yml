@@ -27,12 +27,17 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
+          DBHOST: ${{ secrets.DBHOST }}
+          DBPORT: ${{ secrets.DBPORT }}
+          DBUSER: ${{ secrets.DBUSER }}
+          DBPASSWORD: ${{ secrets.DBPASSWORD }}
+          DBNAME: ${{ secrets.DBNAME }}
           script: |
-            export DBHOST =${{ secrets.DBHOST }}
-            export DBPORT=${{ secrets.DBPORT }}
-            export DBUSER=${{ secrets.DBUSER }}
-            export DBPASSWORD=${{ secrets.DBPASSWORD }}
-            export DBNAME=${{ secrets.DBNAME }}
+            export DBHOST =DBHOST
+            export DBPORT=DBPORT
+            export DBUSER=DBUSER
+            export DBPASSWORD=DBPASSWORD
+            export DBNAME=DBNAME
             export PORT=8000
             chmod +x main
             nohup ./main &
