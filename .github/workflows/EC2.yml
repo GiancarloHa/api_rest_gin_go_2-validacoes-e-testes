@@ -1,4 +1,4 @@
-name: Entrega contínua
+name: Entrega continua
 
 on:
   workflow_call:
@@ -6,38 +6,35 @@ on:
 jobs:
 
   EC2:
-     runs-on: ubuntu-latest
-     steps:
-      - name: Download main compilado
-        uses: actions/download-artifact@v3
-        with:
-          name: programa
-      - name: Deploy to Staging server
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: /home/${{ secrets.REMOTE_USER }}
-          EXCLUDE: "postgres-data"
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          DBHOST: ${{ secrets.DBHOST }}
-          DBPORT: ${{ secrets.DBPORT }}
-          DBUSER: ${{ secrets.DBUSER }}
-          DBPASSWORD: ${{ secrets.DBPASSWORD }}
-          DBNAME: ${{ secrets.DBNAME }}
-          script: |
-            export DBHOST =DBHOST
-            export DBPORT=DBPORT
-            export DBUSER=DBUSER
-            export DBPASSWORD=DBPASSWORD
-            export DBNAME=DBNAME
-            export PORT=8000
-            chmod +x main
-            nohup ./main &
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3.0.0
+      with:
+    # Artifact name
+        name: programa
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to Staging server
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        TARGET: /home/${{ secrets.REMOTE_USER }}
+        EXCLUDE: "postgres-data"
+        
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          export HOST=${{ secrets.DBHOST }}
+          export USER=${{ secrets.DBUSER }}
+          export PASSWORD=${{ secrets.DBPASSWORD }}
+          export DBNAME=${{ secrets.DBNAME }}
+          export DBPORT=${{ secrets.DBPORT }}
+          export PORT=8000
